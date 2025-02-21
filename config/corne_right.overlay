@@ -19,10 +19,10 @@
 &pro_micro_i2c {
   status = "okay";
 
-	pim447_trackball@a {
+	trackball_pim447@a {
 		compatible = "pimoroni,trackball_pim447";
 		reg = <0xa>;
-		label = "PIM447_TRACKBALL";
+		label = "TRACKBALL_PIM447";
 		power-layer = <0>; /* MOUSE layer */
 		//idle-timeout = <10>; /* in seconds */
 
