@@ -23,12 +23,8 @@
 		compatible = "pimoroni,trackball_pim447";
 		reg = <0xa>;
 		label = "TRACKBALL_PIM447";
-		power-layer = <0>; /* MOUSE layer */
-		//idle-timeout = <10>; /* in seconds */
+		power-layer = <0>;
 
-		/* Modified from,
-		 * https://gitlab.com/voidyourwarranty/zmk-yackboard/-/blob/0f6f8e19688af082116604acf793aca25d5de1f1/app/boards/shields/yackboard/yackboard_right.overlay
-		 */
 		mode = <PIM447_MOVE>;        // default: PIM447_MOVE for mouse move; alternatives: PIM447_SCROLL for scroll wheel, PIM447_TOGGLE for toggle on button press
 		move-factor-x = <200>;       // Sensitivity X; default: 100
 		move-factor-y = <200>;       // Sensitivity Y; default: 100
