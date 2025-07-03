@@ -76,7 +76,7 @@ RC(2,1) RC(2,2) RC(2,3) RC(2,4) RC(2,5)  RC(2,6) RC(2,7) RC(2,8) RC(2,9) RC(2,10
 
     // Define the trackball node, disabled by default
     trackball: pim447@a {
-        compatible = "pimoroni,pim447";
+        compatible = "zmk,behavior-pim447";
         reg = <0x0A>;
         status = "disabled"; // Disabled here, enabled in right overlay
         int-gpios = <&pro_micro 3 GPIO_ACTIVE_LOW>;
