@@ -30,7 +30,7 @@
 // Restore correct nested structure for I2C and trackball enablement
 //&pro_micro_i2c {
     ///* Explicitly reference the trackball node, rely on default pins from .dtsi */
-    //pimoroni_pim447: pimoroni_pim447@0x0a {
+    //pim447: pimoroni_pim447@0x0a {
         //status = "okay";
         ///* int-gpios will use default <&pro_micro 3> from .dtsi */
         ///* I2C pins (sda/scl) will use defaults from board/dtsi */
@@ -40,7 +40,7 @@
 &i2c0 {
     status = "okay";
 
-    pimoroni_pim447: pimoroni_pim447@0a {
+    pim447: pimoroni_pim447@a {
         compatible = "zmk,pimoroni-pim447";
         reg = <0x0a>;
         label = "PIM447";
