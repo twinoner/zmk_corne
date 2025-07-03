@@ -1,22 +1,21 @@
 manifest:
   remotes:
+    # -----
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
-    # -----
-    - name: zmk_ds87
-      url-base: https://github.com/daniel2887
+    - name: pimoroni_trackball
+      url-base: https://github.com/t0bybr/
     - name: m165437 #new entry
       url-base: https://github.com/M165437 #new entry
   projects:
+    # -----
     - name: zmk
       remote: zmkfirmware
       revision: main
       import: app/west.yml
-    # -----
-    - name: zmk-config
-      remote: zmk_ds87
-      revision: master
-      import: app/west.yml
+    - name: pim447
+      remote: pimoroni_trackball
+      revision: main
     - name: nice-view-gem #new entry
       remote: m165437 #new entry
       revision: main #new entry

@@ -1,0 +1,48 @@
+/*
+ * Copyright (c) 2020 Ryan Cross
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#include "corne.dtsi"
+
+&default_transform {
+    col-offset = <6>;
+};
+
+&five_column_transform {
+    col-offset = <6>;
+};
+
+&kscan0 {
+    col-gpios
+        = <&pro_micro 14 GPIO_ACTIVE_HIGH>
+        , <&pro_micro 15 GPIO_ACTIVE_HIGH>
+        , <&pro_micro 18 GPIO_ACTIVE_HIGH>
+        , <&pro_micro 19 GPIO_ACTIVE_HIGH>
+        , <&pro_micro 20 GPIO_ACTIVE_HIGH>
+        , <&pro_micro 21 GPIO_ACTIVE_HIGH>
+        ;
+};
+
+// &right_encoder { status = "okay"; }; // Keep commented out - no right encoder
+
+// Restore correct nested structure for I2C and trackball enablement
+&pro_micro_i2c {
+    /* Explicitly reference the trackball node, rely on default pins from .dtsi */
+    trackball: pim447@a {
+        status = "okay";
+        /* int-gpios will use default <&pro_micro 3> from .dtsi */
+        /* I2C pins (sda/scl) will use defaults from board/dtsi */
+    };
+};
+
+// Enable the input split driver
+&input_split {
+    status = "okay";
+};
+
+/* Left side encoder is defined in the left overlay */
+// &left_encoder { status = "disabled"; } // Comment out again - build worked without it
+
+// Cache buster
