@@ -28,14 +28,27 @@
 // &right_encoder { status = "okay"; }; // Keep commented out - no right encoder
 
 // Restore correct nested structure for I2C and trackball enablement
-&pro_micro_i2c {
-    /* Explicitly reference the trackball node, rely on default pins from .dtsi */
-    trackball: pim447@a {
-        status = "okay";
-        /* int-gpios will use default <&pro_micro 3> from .dtsi */
-        /* I2C pins (sda/scl) will use defaults from board/dtsi */
+//&pro_micro_i2c {
+    ///* Explicitly reference the trackball node, rely on default pins from .dtsi */
+    //pimoroni_pim447: pimoroni_pim447@0x0a {
+        //status = "okay";
+        ///* int-gpios will use default <&pro_micro 3> from .dtsi */
+        ///* I2C pins (sda/scl) will use defaults from board/dtsi */
+    //};
+//};
+
+&i2c0 {
+    status = "okay";
+
+    pimoroni_pim447: pimoroni_pim447@0a {
+        compatible = "zmk,pimoroni-pim447";
+        reg = <0x0a>;
+        label = "PIM447";
+
+        int-gpios = <&gpio0 10 GPIO_ACTIVE_LOW>; // Adjust pin as per your wiring
     };
 };
+
 
 // Enable the input split driver
 &input_split {
