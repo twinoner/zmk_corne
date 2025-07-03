@@ -13,9 +13,9 @@ manifest:
       revision: main
       import: app/west.yml
     # -----
-    - name: zmk
+    - name: zmk-config
       remote: zmk_ds87
-      revision: ds87-mouse-pim447
+      revision: master
       import: app/west.yml
     - name: nice-view-gem #new entry
       remote: m165437 #new entry
