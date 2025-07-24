@@ -3,7 +3,7 @@ manifest:
     - name: zmk
       url-base: https://github.com/twinoner
   projects:
-    - name: zmkfirmware
+    - name: zmk
       remote: zmk
       # revision: try-pim447
       revision: main
