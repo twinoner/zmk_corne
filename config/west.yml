@@ -2,18 +2,11 @@ manifest:
   remotes:
     - name: zmk
       url-base: https://github.com/twinoner
-    # Additional modules containing boards/shields/custom code can be listed here as well
-    # See https://docs.zephyrproject.org/3.2.0/develop/west/manifest.html#projects
-    - name: m165437 #nice-gem
-      url-base: https://github.com/M165437 #nice-gem
   projects:
     - name: zmkfirmware
       remote: zmk
-      revision: try-pim447
-      # revision: refs/pull/961/head
+      # revision: try-pim447
+      revision: main
       import: app/west.yml
-    - name: nice-view-gem #nice-gem
-      remote: m165437 #nice-gem
-      revision: main #nice-gem
   self:
     path: config
