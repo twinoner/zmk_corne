@@ -5,7 +5,7 @@ manifest:
   projects:
     - name: zmk
       remote: zmk
-      revision: try-pim447
+      revision: tree/try-pim447
       # revision: main
       import: app/west.yml
   self:
