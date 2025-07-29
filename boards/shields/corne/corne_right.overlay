@@ -15,6 +15,14 @@
 };
 
 &kscan0 {
+    // Corne standard right-hand matrix pins
+    row-gpios
+        = <&gpio0 20 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+        , <&gpio0 24 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+        , <&gpio0 22 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+        , <&gpio0 23 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+        ;
+        
     col-gpios
         = <&pro_micro 14 GPIO_ACTIVE_HIGH>
         , <&pro_micro 15 GPIO_ACTIVE_HIGH>
@@ -25,36 +33,39 @@
         ;
 };
 
+// Configure I2C1 pins for the PIM447 trackball
 &pinctrl {
     i2c1_default: i2c1_default {
-		group1 {
-			psels = <NRF_PSEL(TWIM_SDA, 0, 2)>,
-					<NRF_PSEL(TWIM_SCL, 0, 3)>;
+        group1 {
+            // Using P0.26 (SDA) and P0.27 (SCL)
+            psels = <NRF_PSEL(TWIM_SDA, 0, 26)>,
+                    <NRF_PSEL(TWIM_SCL, 0, 27)>;
             bias-pull-up;
-		};
-	};
+        };
+    };
 
-	i2c1_sleep: i2c1_sleep {
-		group1 {
-			psels = <NRF_PSEL(TWIM_SDA, 0, 2)>,
-					<NRF_PSEL(TWIM_SCL, 0, 3)>;
+    i2c1_sleep: i2c1_sleep {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SDA, 0, 26)>,
+                    <NRF_PSEL(TWIM_SCL, 0, 27)>;
             low-power-enable;
-		};
-	};
+        };
+    };
 };
+
 
 &i2c1 {
 	status = "okay";
 
-	compatible = "nordic,nrf-twi";
+    compatible = "nordic,nrf-twi";
     pinctrl-0 = <&i2c1_default>;
-	pinctrl-1 = <&i2c1_sleep>;
-	pinctrl-names = "default", "sleep";
-	clock-frequency = <I2C_BITRATE_STANDARD>;
+    pinctrl-1 = <&i2c1_sleep>;
+    pinctrl-names = "default", "sleep";
+    clock-frequency = <I2C_BITRATE_STANDARD>;
 
     pim447: pim447@0a {
         compatible = "pimoroni,pim447";
         reg = <0x0A>;
-		interrupt-gpios = <&gpio0 9 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+        interrupt-gpios = <&gpio0 9 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
     };
 };
