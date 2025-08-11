@@ -1,19 +1,16 @@
 manifest:
   remotes:
-    - name: zmkfirmware
-      url-base: https://github.com/zmkfirmware
-    # Additional modules containing boards/shields/custom code can be listed here as well
-    # See https://docs.zephyrproject.org/3.2.0/develop/west/manifest.html#projects
-    - name: m165437 #nice-gem
-      url-base: https://github.com/M165437 #nice-gem
+    - name: zmk_ds87
+      url-base: https://github.com/daniel2887
+    # - name: m165437 #nice-gem
+    #   url-base: https://github.com/M165437 #nice-gem
   projects:
     - name: zmk
-      remote: zmkfirmware
-      revision: main
-      # revision: refs/pull/961/head
+      remote: zmk_ds87
+      revision: ds87-mouse-pim447
       import: app/west.yml
-    - name: nice-view-gem #nice-gem
-      remote: m165437 #nice-gem
-      revision: main #nice-gem
+    # - name: nice-view-gem #nice-gem
+    #   remote: m165437 #nice-gem
+    #   revision: main #nice-gem
   self:
     path: config
