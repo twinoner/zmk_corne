@@ -1,20 +1,14 @@
 manifest:
   remotes:
-    - name: jgreel
-      url-base: https://github.com/jgreel
-    # - name: zmk_ds87
-    #   url-base: https://github.com/daniel2887
+    - name: zmk_ds87
+      url-base: https://github.com/daniel2887
     # - name: m165437 #nice-gem
     #   url-base: https://github.com/M165437 #nice-gem
   projects:
     - name: zmk
-      remote: jgreel
-      revision: devel-mouse-pim447
+      remote: zmk_ds87
+      revision: ds87-mouse-pim447
       import: app/west.yml
-    # - name: zmk
-    #   remote: zmk_ds87
-    #   revision: ds87-mouse-pim447
-    #   import: app/west.yml
     # - name: nice-view-gem #nice-gem
     #   remote: m165437 #nice-gem
     #   revision: main #nice-gem
