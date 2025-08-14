@@ -1,16 +1,15 @@
 manifest:
   remotes:
-    - name: zmk_trypim447
-      url-base: https://github.com/cdc-mkb
+    - name: jgreel
+      url-base: https://github.com/jgreel
     # - name: zmk_ds87
     #   url-base: https://github.com/daniel2887
     # - name: m165437 #nice-gem
     #   url-base: https://github.com/M165437 #nice-gem
   projects:
     - name: zmk
-      remote: zmk_trypim447
-      revision: mouse-pim447
-      # revision: cdc-mkb-pim447
+      remote: jgreel
+      revision: devel-mouse-pim447
       import: app/west.yml
     # - name: zmk
     #   remote: zmk_ds87
