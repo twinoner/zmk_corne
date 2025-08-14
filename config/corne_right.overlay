@@ -1,48 +1,32 @@
-#include <dt-bindings/zmk/trackball_pim447.h> // for PIM447_MOVE and PIM447_SCROLL constants
+#ifdef CONFIG_ZMK_TRACKBALL_PIM447
+#include <dt-bindings/zmk/trackball_pim447.h>
 
-/ {
-    chosen {
-        zmk,kscan = &default_kscan;
-    };
-
-    default_kscan: kscan {
-        compatible = "zmk,kscan-gpio-direct";
-        label = "default_kscan";
-
-        input-gpios
-            = <&xiao_d 0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // Row A from the schematic file
-            , <&xiao_d 1 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // Row B from the schematic file
-            //, <&xiao_d 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // Row C from the schematic file
-            ;
-    };
-};
-
-&xiao_i2c {
-	status = "okay";
-	trackball_pim447@a {
+&pro_micro_i2c {
+	pim447_trackball@a {
 		compatible = "pimoroni,trackball_pim447";
 		reg = <0xa>;
-		label = "TRACKBALL_PIM447";
-		
-		//move-factor = <1>;      // Increase pointer velocity (default: 1); used by cdc-mkb branch 
-		move-factor-x = <200>;	// used by voidyourwarranty branch, default 100
-		move-factor-y = <200>;	// used by voidyourwarranty branch, default 100
-		move-inertia-x = <1>;	// used by voidyourwarranty branch, default 0
-		move-inertia-y = <1>;	// used by voidyourwarranty branch, default 0
-		//invert-move-x;          // Invert pointer X axis (left is right, and vice versa)
-		//invert-move-y;          // Invert pointer Y axis (up is down, and vice versa)
-		button = <2>;           // Send right-click when pressing the ball (default: 0 = left click, 1 = right click, 2 = middle click?)
-		//swap-axes;              // Swap X and Y axes (horizontal is vertical, and vice versa)
-		//poll-interval = <50>;	//used by voidyourwarranty branch, default 50
-		//scroll-divisor = <1>;   // Increase wheel velocity (default: 2); used by cdc-mkb branch
-		scroll-divisor-x = <2>;	// Increase wheel velocity (default: 2); used by voidyourwarranty branch 
-		scroll-divisor-y = <2>;	// Increase wheel velocity (default: 2); used by voidyourwarranty branch 
-		invert-scroll-x;        // Invert wheel X axis (left is right, and vice versa)
-		invert-scroll-y;        // Invert wheel Y axis (up is down, and vice versa)
-		mode = <PIM447_SCROLL>; // Act as mouse wheels at startup (default: PIM447_MOVE for a pointer)
-		//norm	= <1>;			// voidyourwarranty branch, not sure what does
-		//exactness = <4>;		// voidyourwarranty branch, not sure what does
-		//max-accel = <100>;	// voidyourwarranty branch, not sure what does
-		//power-layer = <0>;	// voidyourwarranty branch, makes track ball driver and 3V3 power output of the Nice!Nano (not sure about other MCU) depend on given layer
+		label = "PIM447_TRACKBALL";
+		swap-axes;
+		invert-move-x;
+		power-layer = <10>; /* MOUSE layer */
+		//idle-timeout = <10>; /* in seconds */
+
+		/* Modified from,
+		 * https://gitlab.com/voidyourwarranty/zmk-yackboard/-/blob/0f6f8e19688af082116604acf793aca25d5de1f1/app/boards/shields/yackboard/yackboard_right.overlay
+		 */
+		mode = <PIM447_MOVE>;        // default: PIM447_MOVE for mouse move; alternatives: PIM447_SCROLL for scroll wheel, PIM447_TOGGLE for toggle on button press
+		move-factor-x = <100>;       // Sensitivity X; default: 100
+		move-factor-y = <100>;       // Sensitivity Y; default: 100
+		move-inertia-x = <90>;       // Inertia X, between 0 (no inertia) and 99 (huge inertia); default: 0; note that some inertia is needed for acceleration
+		move-inertia-y = <90>;       // Inertia Y, between 0 (no inertia) and 99 (huge inertia); default: 0; note that some inertia is needed for acceleration
+		norm = <PIM447_NORM_EUCLID>; // Metric for 2d distance measurement; default: PIM447_NORM_EUCLID; alternative: PIM447_NORM_MAX in order to enhance diagonal movement
+		exactness = <5>;             // Range of small velocities that are not accelerated
+		max-accel = <100>;           // Maximum acceleration; default: 100
+		scroll-divisor-x = <1>;      // Increase wheel velocity (default: 2)
+		scroll-divisor-y = <1>;      // Increase wheel velocity (default: 2)
+		invert-scroll-x;             // Invert wheel X axis (left is right, and vice versa)
+		button = <0>;                // Send mouse button 4 when pressing the ball which is usually ignored by the operating system (default: 0, ie. left-click)
+		poll-interval = <10>;        // Interval in milli-seconds at which the track ball is polled (default: 50)
 	};
 };
+#endif // CONFIG_ZMK_TRACKBALL_PIM447
