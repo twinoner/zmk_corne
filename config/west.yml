@@ -1,7 +1,7 @@
 manifest:
   remotes:
     - name: zmk_trypim447
-      url-base: https://github.com/twinoner
+      url-base: https://github.com/cdc-mkb
     # - name: zmk_ds87
     #   url-base: https://github.com/daniel2887
     # - name: m165437 #nice-gem
@@ -9,7 +9,7 @@ manifest:
   projects:
     - name: zmk
       remote: zmk_trypim447
-      revision: main
+      revision: mouse-pim447
       # revision: cdc-mkb-pim447
       import: app/west.yml
     # - name: zmk
