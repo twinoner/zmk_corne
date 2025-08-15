@@ -5,9 +5,9 @@ manifest:
     # - name: m165437 #nice-gem
     #   url-base: https://github.com/M165437 #nice-gem
   projects:
-    - name: zmk
+    - name: zmk-daniel2887
       remote: zmk_ds87
-      revision: ds87-pim447
+      revision: ds87-mouse-pim447
       import: app/west.yml
     # - name: nice-view-gem #nice-gem
     #   remote: m165437 #nice-gem
