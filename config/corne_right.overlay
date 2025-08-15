@@ -5,7 +5,7 @@
 	pim447_trackball@a {
 		compatible = "pimoroni,trackball_pim447";
 		reg = <0xa>;
-		label = "PIM447_TRACKBALL";
+		label = "TRACKBALL_PIM447";
 		swap-axes;
 		invert-move-x;
 		power-layer = <10>; /* MOUSE layer */
