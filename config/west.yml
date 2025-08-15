@@ -1,13 +1,13 @@
 manifest:
   remotes:
     - name: zmk_ds87
-      url-base: https://github.com/daniel2887
+      url-base: https://github.com/twinoner
     # - name: m165437 #nice-gem
     #   url-base: https://github.com/M165437 #nice-gem
   projects:
     - name: zmk
       remote: zmk_ds87
-      revision: ds87-mouse-pim447
+      revision: ds87-pim447
       import: app/west.yml
     # - name: nice-view-gem #nice-gem
     #   remote: m165437 #nice-gem
