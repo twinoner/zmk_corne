@@ -23,11 +23,13 @@
 		compatible = "pimoroni,trackball_pim447";
 		reg = <0xa>;
 		label = "PIM447_TRACKBALL";
-		invert-move-x;               // Invert mouse X axis (left is right, and vice versa)
-    	// invert-move-y;               // Invert mouse Y axis (up is down, and vice versa)
 		power-layer = <0>; /* MOUSE layer */
 		//idle-timeout = <10>; /* in seconds */
-
+		// invert-move-x;               // Invert mouse X axis (left is right, and vice versa)
+    	// invert-move-y;               // Invert mouse Y axis (up is down, and vice versa)
+		// swap-axes;                   // Swap X and Y axes (horizontal is vertical, and vice versa)
+		// invert-scroll-x;             // Invert wheel X axis (left is right, and vice versa)
+		
 		/* Modified from,
 		 * https://gitlab.com/voidyourwarranty/zmk-yackboard/-/blob/0f6f8e19688af082116604acf793aca25d5de1f1/app/boards/shields/yackboard/yackboard_right.overlay
 		 */
@@ -41,8 +43,6 @@
 		max-accel = <100>;           // Maximum acceleration; default: 100
 		scroll-divisor-x = <1>;      // Increase wheel velocity (default: 2)
 		scroll-divisor-y = <1>;      // Increase wheel velocity (default: 2)
-		// swap-axes;                   // Swap X and Y axes (horizontal is vertical, and vice versa)
-		// invert-scroll-x;             // Invert wheel X axis (left is right, and vice versa)
 		button = <0>;                // Send mouse button 4 when pressing the ball which is usually ignored by the operating system (default: 0, ie. left-click)
 		poll-interval = <10>;        // Interval in milli-seconds at which the track ball is polled (default: 50)
 	};
