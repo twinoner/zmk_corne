@@ -16,14 +16,49 @@
 		;
 };
 
-&pro_micro_i2c {
-    status = "disabled";
+&pinctrl {
+    spi0_default: spi0_default {
+        group1 {
+            /* SCK = P1.04 (36), MOSI = P1.06 (38) */
+            psels = <NRF_PSEL(SPIM_SCK, 1, 4)>,
+                    <NRF_PSEL(SPIM_MOSI, 1, 6)>;
+        };
+    };
+
+    spi0_sleep: spi0_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK, 1, 4)>,
+                    <NRF_PSEL(SPIM_MOSI, 1, 6)>;
+            low-power-enable;
+        };
+    };
+
+    i2c0_default: i2c0_default {
+        group1 {
+            /* SDA = P1.04 (36), SCL = P1.06 (38) */
+            psels = <NRF_PSEL(TWIM_SDA, 1, 4)>,
+                    <NRF_PSEL(TWIM_SCL, 1, 6)>;
+        };
+    };
+
+    i2c0_sleep: i2c0_sleep {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SDA, 1, 4)>,
+                    <NRF_PSEL(TWIM_SCL, 1, 6)>;
+            low-power-enable;
+        };
+    };
 };
 
-&i2c0 {
+
+&i2c1 {
 	status = "okay";
-	sda-pin = <36>; /* P1.04 */
-	scl-pin = <38>; /* P1.06 */
+	// sda-pin = <36>; /* P1.04 */
+	// scl-pin = <38>; /* P1.06 */
+
+	pinctrl-0 = <&i2c0_default>;
+    pinctrl-1 = <&i2c0_sleep>;
+    pinctrl-names = "default", "sleep";
 
 	pim447_trackball@a {
 		compatible = "pimoroni,trackball_pim447";
