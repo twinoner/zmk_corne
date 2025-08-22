@@ -33,7 +33,7 @@
         };
     };
 
-    i2c0_default: i2c0_default {
+    i2c1_default: i2c1_default {
         group1 {
             /* SDA = P1.04 (36), SCL = P1.06 (38) */
             psels = <NRF_PSEL(TWIM_SDA, 1, 4)>,
@@ -41,7 +41,7 @@
         };
     };
 
-    i2c0_sleep: i2c0_sleep {
+    i2c1_sleep: i2c1_sleep {
         group1 {
             psels = <NRF_PSEL(TWIM_SDA, 1, 4)>,
                     <NRF_PSEL(TWIM_SCL, 1, 6)>;
@@ -51,13 +51,13 @@
 };
 
 
-&i2c0 {
+&i2c1 {
 	status = "okay";
 	// sda-pin = <36>; /* P1.04 */
 	// scl-pin = <38>; /* P1.06 */
 
-	pinctrl-0 = <&i2c0_default>;
-    pinctrl-1 = <&i2c0_sleep>;
+	pinctrl-0 = <&i2c1_default>;
+    pinctrl-1 = <&i2c1_sleep>;
     pinctrl-names = "default", "sleep";
 
 	pim447_trackball@a {
