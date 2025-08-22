@@ -51,7 +51,7 @@
 };
 
 
-&i2c1 {
+&i2c0 {
 	status = "okay";
 	// sda-pin = <36>; /* P1.04 */
 	// scl-pin = <38>; /* P1.06 */
