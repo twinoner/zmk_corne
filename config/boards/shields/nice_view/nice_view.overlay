@@ -5,6 +5,11 @@
 &nice_view_spi {
     status = "okay";
 
+    /* Nice!View display on SPI using P1.04/P1.06 */
+    sck-pin = <36>;   /* P1.04 */
+    mosi-pin = <38>;  /* P1.06 */
+    miso-pin = <25>;  /* keep default if used */
+
     nice_view: ls0xx@0 {
         compatible = "sharp,ls0xx";
         label = "DISPLAY";
@@ -24,8 +29,6 @@
 /* Force trackball I2C remap to P1.04/P1.06 */
 &i2c0 {
     status = "okay";
-    sda-pin = <36>; /* P1.04 */
-    scl-pin = <38>; /* P1.06 */
 };
 
 /* Disable default Pro Micro I2C (if any) */
