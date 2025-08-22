@@ -6,11 +6,11 @@
 
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
-#include <dt-bindings/zmk/trackball_pim447.h>
 #include <dt-bindings/zmk/mouse.h>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/outputs.h>
 #include <dt-bindings/zmk/ext_power.h>
+#include <dt-bindings/zmk/trackball_pim447.h>
 
 #define DEFAULT 0
 #define LOWER   1
@@ -19,6 +19,13 @@
 
 #define ZMK_POINTING_DEFAULT_MOVE_VAL 1500  // default: 600
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 20    // default: 10
+
+#ifdef CONFIG_ZMK_TRACKBALL_PIM447
+    #define PIM447_SCROLL_MOVE pim447_scroll_move
+#else
+    #define PIM447_SCROLL_MOVE none
+#endif
+
 
 / {
 	conditional_layers {
