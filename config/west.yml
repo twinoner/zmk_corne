@@ -7,13 +7,8 @@ manifest:
   projects:
     - name: zmk-daniel2887
       remote: zmk_ds87
-      # revision: ds87-mouse-pim447
-      revision: pim-neo_zmk #try to merge current zmk
+      revision: ds87-mouse-pim447
       import: app/west.yml
-    # - name: zmk
-    #   remote: zmk_ds87
-    #   revision: ds87-pim447
-    #   import: app/west.yml
     # - name: nice-view-gem #nice-gem
     #   remote: m165437 #nice-gem
     #   revision: main #nice-gem
