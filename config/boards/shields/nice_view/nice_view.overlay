@@ -6,9 +6,9 @@
     status = "okay";
 
     /* Nice!View display on SPI using P1.04/P1.06 */
-    sck-pin = <36>;   /* P1.04 */
-    mosi-pin = <38>;  /* P1.06 */
-    miso-pin = <25>;  /* keep default if used */
+    // sck-pin = <36>;   /* P1.04 */
+    // mosi-pin = <38>;  /* P1.06 */
+    // miso-pin = <25>;  /* keep default if used */
 
     nice_view: ls0xx@0 {
         compatible = "sharp,ls0xx";
