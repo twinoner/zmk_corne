@@ -38,10 +38,10 @@
 		mode = <PIM447_MOVE>;        // default: PIM447_MOVE for mouse move; alternatives: PIM447_SCROLL for scroll wheel, PIM447_TOGGLE for toggle on button press
 		move-factor-x = <100>;       // Sensitivity X; default: 100
 		move-factor-y = <100>;       // Sensitivity Y; default: 100
-		move-inertia-x = <60>;       // Inertia X, between 0 (no inertia) and 99 (huge inertia); default: 0; note that some inertia is needed for acceleration
-		move-inertia-y = <60>;       // Inertia Y, between 0 (no inertia) and 99 (huge inertia); default: 0; note that some inertia is needed for acceleration
+		move-inertia-x = <70>;       // Inertia X, between 0 (no inertia) and 99 (huge inertia); default: 0; note that some inertia is needed for acceleration
+		move-inertia-y = <70>;       // Inertia Y, between 0 (no inertia) and 99 (huge inertia); default: 0; note that some inertia is needed for acceleration
 		norm = <PIM447_NORM_MAX>; // Metric for 2d distance measurement; default: PIM447_NORM_EUCLID; alternative: PIM447_NORM_MAX in order to enhance diagonal movement
-		exactness = <6>;             // Range of small velocities that are not accelerated
+		exactness = <5>;             // Range of small velocities that are not accelerated
 		max-accel = <120>;           // Maximum acceleration; default: 100
 		scroll-divisor-x = <1>;      // Increase wheel velocity (default: 2)
 		scroll-divisor-y = <1>;      // Increase wheel velocity (default: 2)
