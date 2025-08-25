@@ -4,8 +4,8 @@ manifest:
       url-base: https://github.com/zmkfirmware
     - name: zmk_ds87
       url-base: https://github.com/daniel2887
-    - name: m165437 #nice-gem
-      url-base: https://github.com/M165437 #nice-gem
+    # - name: m165437 #nice-gem
+    #   url-base: https://github.com/M165437 #nice-gem
     # support nice_oled and nice_epaper
     # - name: mctechnology17
     #   url-base: https://github.com/mctechnology17
@@ -14,9 +14,9 @@ manifest:
       remote: zmk_ds87
       revision: ds87-mouse-pim447
       import: app/west.yml
-    - name: nice-view-gem #nice-gem
-      remote: m165437 #nice-gem
-      revision: main #nice-gem
+    # - name: nice-view-gem #nice-gem
+    #   remote: m165437 #nice-gem
+    #   revision: main #nice-gem
     # - name: zmk-nice-oled
     #   remote: mctechnology17
     #   revision: main
