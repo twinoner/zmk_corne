@@ -4,6 +4,9 @@ manifest:
       url-base: https://github.com/twinoner
     # - name: m165437 #nice-gem
     #   url-base: https://github.com/M165437 #nice-gem
+    # support nice_oled and nice_epaper
+    - name: mctechnology17
+      url-base: https://github.com/mctechnology17
   projects:
     - name: zmk-daniel2887
       remote: zmk_ds87
@@ -12,5 +15,8 @@ manifest:
     # - name: nice-view-gem #nice-gem
     #   remote: m165437 #nice-gem
     #   revision: main #nice-gem
+    - name: zmk-nice-oled
+      remote: mctechnology17
+      revision: main
   self:
     path: config
