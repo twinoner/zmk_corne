@@ -1,5 +1,7 @@
 manifest:
   remotes:
+    - name: zmkfirmware
+      url-base: https://github.com/zmkfirmware
     - name: zmk_ds87
       url-base: https://github.com/daniel2887
     # - name: m165437 #nice-gem
