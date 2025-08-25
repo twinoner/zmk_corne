@@ -41,10 +41,10 @@
 		move-inertia-x = <60>;       // Inertia X, between 0 (no inertia) and 99 (huge inertia); default: 0; note that some inertia is needed for acceleration
 		move-inertia-y = <60>;       // Inertia Y, between 0 (no inertia) and 99 (huge inertia); default: 0; note that some inertia is needed for acceleration
 		norm = <PIM447_NORM_MAX>; // Metric for 2d distance measurement; default: PIM447_NORM_EUCLID; alternative: PIM447_NORM_MAX in order to enhance diagonal movement
-		exactness = <10>;             // Range of small velocities that are not accelerated
+		exactness = <8>;             // Range of small velocities that are not accelerated
 		max-accel = <120>;           // Maximum acceleration; default: 100
-		scroll-divisor-x = <2>;      // Increase wheel velocity (default: 2)
-		scroll-divisor-y = <2>;      // Increase wheel velocity (default: 2)
+		scroll-divisor-x = <1>;      // Increase wheel velocity (default: 2)
+		scroll-divisor-y = <1>;      // Increase wheel velocity (default: 2)
 		button = <0>;                // Send mouse button 4 when pressing the ball which is usually ignored by the operating system (default: 0, ie. left-click)
 		poll-interval = <40>;        // Interval in milli-seconds at which the track ball is polled (default: 50)
 	};
