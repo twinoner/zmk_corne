@@ -46,6 +46,6 @@
 		scroll-divisor-x = <3>;      // Increase wheel velocity (default: 2)
 		scroll-divisor-y = <3>;      // Increase wheel velocity (default: 2)
 		button = <0>;                // Send mouse button 4 when pressing the ball which is usually ignored by the operating system (default: 0, ie. left-click)
-		poll-interval = <20>;        // Interval in milli-seconds at which the track ball is polled (default: 50)
+		poll-interval = <15>;        // Interval in milli-seconds at which the track ball is polled (default: 50)
 	};
 };
