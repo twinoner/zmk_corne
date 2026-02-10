@@ -29,15 +29,15 @@
         };
     };
 
-	combos {
-        compatible = "zmk,combos";
-		// option + command keypress
-        combo_op_cmd {
-            timeout-ms = <50>;
-            key-positions = <0 1>;
-            bindings = <&kp LALT &kp LGUI>;
-        };
-    };
+	// combos {
+    //     compatible = "zmk,combos";
+	// 	// option + command keypress
+    //     combo_op_cmd {
+    //         timeout-ms = <50>;
+    //         key-positions = <0 1>;
+    //         bindings = <&kp LALT &kp LGUI>;
+    //     };
+    // };
 
 	keymap {
 		compatible = "zmk,keymap";
@@ -68,7 +68,7 @@
 &kp ESC &kp N1 &kp N2 &kp N3 &kp N4 &kp N5              &kp N6 &kp N7 &kp N8 &kp N9 &kp N0 &kp BSPC
 &kp F1 &kp F2 &kp F3 &kp F4 &kp F5 &kp F6               &kp F7 &kp F8 &kp F9 &kp F10 &kp F11 &kp F12
 &trans &trans &trans &trans &trans &trans            &trans &trans &trans &trans &trans &kp PIPE
-					&combo_op_cmd &trans &kp PG_UP      &kp PG_UP &trans &kp DEL
+					&trans &trans &kp PG_UP      &kp PG_UP &trans &kp DEL
 			>;
 		};
 
