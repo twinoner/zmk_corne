@@ -29,15 +29,15 @@
         };
     };
 
-	// combos {
-    //     compatible = "zmk,combos";
-	// 	// option + command keypress
-    //     combo_op_cmd {
-    //         timeout-ms = <50>;
-    //         key-positions = <0 1>;
-    //         bindings = <&kp LALT &kp LGUI>;
-    //     };
-    // };
+	combos {
+        compatible = "zmk,combos";
+		// option + command keypress
+        combo_op_cmd {
+            timeout-ms = <50>;
+            key-positions = <0 1>;
+            bindings = <&kp LALT &kp LGUI>;
+        };
+    };
 
 	keymap {
 		compatible = "zmk,keymap";
