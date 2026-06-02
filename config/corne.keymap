@@ -80,7 +80,7 @@
 			label = "Dev (R)";
 			bindings = <
 &kp CAPS &trans &trans &trans &trans &trans				&trans &trans &trans &trans &trans &kp GRAVE
-&trans &C_AL_CALENDAR &C_AL_DATABASE &trans &trans &trans			&trans &kp LEFT &kp DOWN &kp UP &kp RIGHT &kp RCTRL
+&trans &kp C_AL_CALENDAR &kp C_AL_DATABASE &trans &trans &trans			&trans &kp LEFT &kp DOWN &kp UP &kp RIGHT &kp RCTRL
 &trans &kp HOME &kp PG_UP &kp PG_DN &kp END &kp K_CMENU			&kp KP_PLUS &kp MINUS &kp EQUAL &kp KP_MULTIPLY &trans &kp BSLH
 					&kp LALT &trans &kp LBKT		&kp RBKT &trans &kp RALT
 			>;
