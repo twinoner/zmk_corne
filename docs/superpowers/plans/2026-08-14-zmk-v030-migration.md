@@ -960,23 +960,18 @@ Keep the existing commented alternatives.
 
 - [ ] **Step 3: Switch to the custom status screen**
 
-In `config/corne.conf`, enable the custom screen and drop the built-in widget lines, which only apply to ZMK's built-in status screen:
+In `config/corne.conf`, uncomment the custom status screen line so the file reads:
 
 ```
 CONFIG_ZMK_DISPLAY=y
 CONFIG_ZMK_DISPLAY_STATUS_SCREEN_CUSTOM=y
 ```
 
-Delete these four lines:
+Then remove the now-obsolete comment line `# turn on to use https://github.com/M165437/nice-view-gem` that sat above it.
 
-```
-CONFIG_ZMK_WIDGET_LAYER_STATUS=y
-CONFIG_ZMK_WIDGET_BATTERY_STATUS=y
-CONFIG_ZMK_WIDGET_BATTERY_STATUS_SHOW_PERCENTAGE=y
-CONFIG_ZMK_WIDGET_WPM_STATUS=y
-```
+**The four `CONFIG_ZMK_WIDGET_*` lines this step originally deleted are already gone** — Task 2 removed them, because in v0.3.0 they force `app/src/display/widgets/*.c` to compile alongside the shield's own widgets and both expand `ZMK_DISPLAY_WIDGET_LISTENER(widget_battery_status, …)` into a non-static `K_MUTEX_DEFINE`, which is a duplicate-symbol link error. Leave the explanatory comment Task 2 left in `corne.conf` in place: it is equally true of `nice_view_gem`, whose `Kconfig.defconfig` also implies `NICE_VIEW_WIDGET_STATUS`.
 
-Also remove the now-obsolete comment block referencing `# turn on to use https://github.com/M165437/nice-view-gem`.
+Note that both `nice_view` and `nice_view_gem` already default `ZMK_DISPLAY_STATUS_SCREEN_CUSTOM` via their own `Kconfig.defconfig`, so setting it explicitly is belt-and-braces — but gem's README instructs setting it, so keep it.
 
 - [ ] **Step 4: Reset the west workspace and build**
 
