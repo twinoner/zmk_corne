@@ -6,26 +6,15 @@
 
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
-#include <dt-bindings/zmk/trackball_pim447.h>
-#include <dt-bindings/zmk/mouse.h>
+#include <dt-bindings/zmk/pointing.h>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/outputs.h>
 #include <dt-bindings/zmk/ext_power.h>
 
-#define DEFAULT 0
-#define LOWER   1
-#define RAISE   2
-#define ADJUST  3
+#include "layers.h"
 
 #define ZMK_POINTING_DEFAULT_MOVE_VAL 1500  // default: 600
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 20    // default: 10
-
-
-#ifdef CONFIG_ZMK_TRACKBALL_PIM447
-    #define PIM447_SCROLL_MOVE pim447_scroll_move
-#else
-    #define PIM447_SCROLL_MOVE none
-#endif
 
 / {
 	conditional_layers {
@@ -64,7 +53,7 @@
 			bindings = <
 &kp ESC &kp N1 &kp N2 &kp N3 &kp N4 &kp N5              &kp N6 &kp N7 &kp N8 &kp N9 &kp N0 &kp BSPC
 &kp F1 &kp F2 &kp F3 &kp F4 &kp F5 &kp F6               &kp F7 &kp F8 &kp F9 &kp F10 &kp F11 &kp F12
-&trans &trans &trans &trans &pim447_scroll_move &pim447_toggle      &mkp MB1 &mkp MB3 &mkp MB2 &trans &trans &kp PIPE
+&trans &trans &trans &trans &mo SCROLL &tog SCROLL      &mkp MB1 &mkp MB3 &mkp MB2 &trans &trans &kp PIPE
 					&kp LGUI &trans &kp PG_UP      &kp PG_UP &trans &kp DEL
 			>;
 		};
@@ -96,6 +85,18 @@
 &trans &trans &trans &trans &trans &trans			 &trans &trans &trans &trans &trans &trans
 &ext_power EP_OFF &ext_power EP_ON &ext_power EP_TOG &trans &trans &trans			&trans &trans &trans &trans &trans &trans
 					&kp K_MUTE &trans &kp C_VOL_DN   		&kp C_VOL_UP &trans &trans
+			>;
+		};
+
+		scroll_layer {
+// The trackball listener remaps X/Y to scroll while this layer is active.
+// All keys stay transparent so the underlying layer still types.
+			label = "Scroll";
+			bindings = <
+&trans &trans &trans &trans &trans &trans		&trans &trans &trans &trans &trans &trans
+&trans &trans &trans &trans &trans &trans		&trans &trans &trans &trans &trans &trans
+&trans &trans &trans &trans &trans &trans		&trans &trans &trans &trans &trans &trans
+					&trans &trans &trans		&trans &trans &trans
 			>;
 		};
 	};
