@@ -27,6 +27,12 @@
     #define PIM447_SCROLL_MOVE none
 #endif
 
+// Zephyr 3.0's sharp,ls0xx binding requires `label`, which nice-view-gem's
+// overlay omits. This file is applied after the shield overlays, so patch it here.
+&nice_view {
+	label = "DISPLAY";
+};
+
 / {
 	conditional_layers {
         compatible = "zmk,conditional-layers";
