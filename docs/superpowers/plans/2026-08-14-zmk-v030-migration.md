@@ -59,7 +59,7 @@ for j in json.load(sys.stdin).get('jobs',[]):
 | File | Status | Responsibility |
 |---|---|---|
 | `scripts/zmk-build.sh` | Create (T1) | Local Docker build mirroring CI; the test runner for every later task |
-| `.gitignore` | Create (T1) | Exclude `build-out/` |
+| `.gitignore` | Modify (T1) | Append `build-out/` — the file already exists and ignores `.superpowers/` |
 | `config/west.yml` | Modify (T2, T5) | West manifest — ZMK pin, later nice-view-gem |
 | `config/corne.dtsi` | **Delete** (T2) | Stale copy of the pre-v0.3.0 corne shield |
 | `config/corne_right.overlay` | Delete (T2), Create (T4) | T2 removes the stale copy; T4 reintroduces it with only trackball additions |
@@ -180,8 +180,10 @@ exit "$status"
 
 ```bash
 chmod +x scripts/zmk-build.sh
-printf 'build-out/\n' > .gitignore
+printf 'build-out/\n' >> .gitignore
 ```
+
+`.gitignore` already exists and already ignores `.superpowers/`. **Append, do not overwrite** — `>` here would delete that entry.
 
 - [ ] **Step 3: Run it against current HEAD — expect success**
 
@@ -625,8 +627,6 @@ Create `config/corne_right.overlay`:
  * SPDX-License-Identifier: MIT
  */
 
-#include "layers.h"
-
 &pinctrl {
 	i2c1_default: i2c1_default {
 		group1 {
@@ -660,7 +660,7 @@ Create `config/corne_right.overlay`:
 
 `NRF_PSEL(TWIM_SDA, 1, 4)` and `(TWIM_SCL, 1, 6)` reproduce the old overlay's `sda-pin = <36>` / `scl-pin = <38>` (36 = P1.04, 38 = P1.06). Zephyr 3.5 removed the bare `sda-pin`/`scl-pin` properties; pinctrl is mandatory.
 
-`#include "layers.h"` is not used yet but lands here now so Task 4 only has to add the listener node.
+This file does **not** include `layers.h` yet — nothing here references a layer. Task 4 adds the include together with the listener node that needs it.
 
 - [ ] **Step 7: Enable I²C and the input subsystem on the central half**
 
@@ -829,7 +829,15 @@ In `pim447_init`, replace the `LOG_INF(...); return 0;` tail with:
 
 - [ ] **Step 4: Add the input listener to the overlay**
 
-Append to `config/corne_right.overlay`:
+In `config/corne_right.overlay`, add the layer header include directly below the file's comment block, above `&pinctrl`:
+
+```c
+#include "layers.h"
+```
+
+The quoted form is required — the config directory is not on the DTS preprocessor's include path, so resolution relies on `layers.h` sitting beside this file.
+
+Then append to the same file:
 
 ```c
 / {
@@ -959,7 +967,7 @@ CONFIG_ZMK_DISPLAY=y
 CONFIG_ZMK_DISPLAY_STATUS_SCREEN_CUSTOM=y
 ```
 
-Delete these three lines:
+Delete these four lines:
 
 ```
 CONFIG_ZMK_WIDGET_LAYER_STATUS=y
