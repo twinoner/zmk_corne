@@ -1,6 +1,8 @@
 manifest:
   remotes:
-    - name: pim447
+    - name: zmkfirmware
+      url-base: https://github.com/zmkfirmware
+    - name: t0bybr
       url-base: https://github.com/t0bybr
     # Additional modules containing boards/shields/custom code can be listed here as well
     # See https://docs.zephyrproject.org/3.2.0/develop/west/manifest.html#projects
@@ -8,9 +10,12 @@ manifest:
       url-base: https://github.com/M165437 #nice-gem
   projects:
     - name: zmk
-      remote: pim447
+      remote: zmkfirmware
       revision: main
       import: app/west.yml
+    - name: pim447
+      remote: t0bybr
+      revision: main
     - name: nice-view-gem #nice-gem
       remote: m165437 #nice-gem
       revision: v0.3.0 #nice-gem
