@@ -12,12 +12,11 @@ manifest:
   projects:
     - name: zmk
       remote: zmk_ds87
-      # revision: ds87-mouse-pim447
-      revision: v0.3_toucan_ds87
+      revision: ds87-mouse-pim447
       import: app/west.yml
     # - name: nice-view-gem #nice-gem
     #   remote: m165437 #nice-gem
-    #   revision: v0.3.0 #nice-gem
+    #   revision: main #nice-gem
     # - name: zmk-nice-oled
     #   remote: mctechnology17
     #   revision: main
