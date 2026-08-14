@@ -298,14 +298,11 @@ In `config/corne.keymap`, replace lines 7–28 (the include block, the layer `#d
 #include <dt-bindings/zmk/ext_power.h>
 
 #include "layers.h"
-
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 1500  // default: 600
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 20    // default: 10
 ```
 
 Changes: `dt-bindings/zmk/mouse.h` → `dt-bindings/zmk/pointing.h`; the `trackball_pim447.h` include is gone; the inline layer defines are replaced by `#include "layers.h"`; the `#ifdef CONFIG_ZMK_TRACKBALL_PIM447` block is gone.
 
-Note the `ZMK_POINTING_DEFAULT_*` defines must stay **above** any use and are already correctly named for v0.3.0 — `pointing.h` guards them with `#ifndef`.
+**Drop the `ZMK_POINTING_DEFAULT_MOVE_VAL` / `ZMK_POINTING_DEFAULT_SCRL_VAL` defines entirely** — do not carry them forward. They are dead code: nothing in the keymap binds `&mmv` or `&msc`, and Tasks 3–4 scale the pointer through `zip_xy_scaler` / `zip_scroll_scaler` instead. They also cannot work where they sat: `dt-bindings/zmk/pointing.h:26-32` defines both under `#ifndef`, so any redefinition *after* that include is a plain macro-redefinition warning and the guard never fires. If mouse-move key bindings are ever added, restore these defines **above** the `pointing.h` include, not below it.
 
 - [ ] **Step 5: Replace the pim447 bindings in the lower layer**
 
