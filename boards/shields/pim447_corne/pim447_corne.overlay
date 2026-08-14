@@ -13,6 +13,19 @@
  * config/west.yml.
  */
 
+/*
+ * Instantiates the `pim447` behavior node. Required, not optional:
+ * CONFIG_ZMK_PIM447_BEHAVIORS defaults to y whenever the driver is enabled,
+ * and behavior_pim447.c calls BEHAVIOR_DT_INST_DEFINE(0, ...) unconditionally,
+ * so the build fails to compile if no zmk,behavior-pim447 node exists.
+ *
+ * Included here rather than in config/corne.keymap because that keymap is
+ * shared with the left half, which has no PIM447. A side benefit is that
+ * `&pim447 <action>` is now bindable on this half (see
+ * dt-bindings/behavior_pim447.h for the actions).
+ */
+#include <behaviors/behavior_pim447.dtsi>
+
 &kscan0 {
     /*
      * Custom right-hand row wiring. Upstream corne uses pro_micro 4/5/6/7
