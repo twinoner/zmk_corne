@@ -18,6 +18,6 @@ manifest:
       revision: main
     - name: nice-view-gem #nice-gem
       remote: m165437 #nice-gem
-      revision: v0.3.0 #nice-gem
+      revision: main #nice-gem (v0.3.0 predates ZMK main: zmk_endpoints_selected rename + zephyr 4.1)
   self:
     path: config

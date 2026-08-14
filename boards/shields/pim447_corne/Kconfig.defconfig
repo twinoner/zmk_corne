@@ -1,0 +1,15 @@
+if SHIELD_PIM447_CORNE
+
+config ZMK_POINTING
+    default y
+
+config ZMK_PIMORONI_PIM447
+    default y
+
+# The trackball INT line is wired to P0.09, which the nRF52840 reserves for the
+# NFC antenna by default. Without this the pin never works as a GPIO and the
+# driver simply never sees an interrupt.
+config NFCT_PINS_AS_GPIOS
+    default y
+
+endif # SHIELD_PIM447_CORNE

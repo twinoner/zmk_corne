@@ -18,14 +18,17 @@
 #     artifact-name: corne_left_with_studio
 #
 ---
+# NOTE: ZMK main uses Zephyr Hardware Model v2. The board `nice_nano_v2` no
+# longer exists; the nice!nano v2 is `nice_nano//zmk` (revision 2.0.0 is the
+# default). Keep this in sync with `revision:` for zmk in config/west.yml.
 include:
-  - board: nice_nano_v2
+  - board: nice_nano//zmk
     shield: corne_left nice_view_adapter nice_view_gem
     # shield: corne_left nice_view_adapter nice_view
     # shield: corne_left
-  - board: nice_nano_v2
-    shield: corne_right nice_view_adapter nice_view_gem
-    # shield: corne_right nice_view_adapter nice_view
-    # shield: corne_right
-  - board: nice_nano_v2
+  - board: nice_nano//zmk
+    shield: corne_right nice_view_adapter nice_view_gem pim447_corne
+    # shield: corne_right nice_view_adapter nice_view pim447_corne
+    # shield: corne_right pim447_corne
+  - board: nice_nano//zmk
     shield: settings_reset
