@@ -668,13 +668,7 @@ CONFIG_I2C=y
 CONFIG_INPUT=y
 ```
 
-Also temporarily uncomment USB logging so Step 10 can observe driver init:
-
-```
-CONFIG_ZMK_USB_LOGGING=y
-```
-
-Task 4 removes the logging line again.
+**Leave `# CONFIG_ZMK_USB_LOGGING=y` commented.** An earlier draft of this step enabled it so the flash gate could watch driver init over serial. That does not work in v0.3.0: the `cdc-acm-uart` node comes from the `zmk-usb-logging` west snippet (`app/snippets/zmk-usb-logging/`, which ships both the `.conf` and an `.overlay` defining `snippet_zmk_usb_logging_uart` under `&zephyr_udc0`), not from the board. Setting the Kconfig alone aborts every build with `error: Aborting due to Kconfig warnings`. Enabling it properly needs `west build -S zmk-usb-logging`, which `scripts/zmk-build.sh` does not pass. See Task 4 Step 5 for the diagnostic path.
 
 - [ ] **Step 8: Build the central half**
 
@@ -714,15 +708,13 @@ git push
 
 Then confirm CI is green using the command from the "Verification model" section.
 
-- [ ] **Step 11: HUMAN GATE — flash and confirm the driver initialises**
+- [ ] **Step 11: HUMAN GATE — flash and confirm nothing regressed**
 
-Flash the right half. Connect over USB serial and confirm the log line:
+Flash both halves and confirm the keyboard behaves exactly as it did after Task 2: both halves pair, all layers type, `&mkp` clicks work. The trackball is still inert — this task adds no reporting.
 
-```
-PIM447 registered on I2C_1 at 0x0a, poll interval 20 ms
-```
+**This gate is a regression check only.** It deliberately does *not* validate the P1.04/P1.06 wiring assumption, for two reasons. First, USB logging is unavailable without the snippet (Step 7). Second, and more fundamentally, the check it was originally designed around would have proved nothing: `i2c_is_ready_dt()` is `device_is_ready(spec->bus)` — it tests the I²C *controller*, not the trackball. It returns true with nothing attached to the bus at all, so "PIM447 registered on I2C_1 at 0x0a" would print on a board with the trackball unplugged.
 
-If instead you see `I2C bus ... is not ready`, the `i2c1` pinctrl or bus configuration is wrong — that is exactly the risk this task exists to isolate. Also re-confirm typing still works on both halves.
+Real wiring validation happens in Task 4, where `i2c_burst_read_dt` actually transacts with the device at `0x0a` and returns `-EIO` if nothing ACKs.
 
 ---
 
@@ -731,7 +723,9 @@ If instead you see `I2C bus ... is not ready`, the `i2c1` pinctrl or bus configu
 **Files:**
 - Modify: `drivers/input/input_pim447.c`
 - Modify: `config/corne_right.overlay`
-- Modify: `config/corne_right.conf`
+- Modify: `scripts/zmk-build.sh` (snippet support, Step 5)
+- Create: `dts/bindings/vendor-prefixes.txt` (Step 5b)
+- Modify: `.gitignore` (Step 5b)
 
 **Interfaces:**
 - Consumes: `pim447_init`, `struct pim447_config`, `struct pim447_data` and the `trackball` node from Task 3; `SCROLL` from `config/layers.h` (T2).
@@ -853,13 +847,49 @@ Then append to the same file:
 
 `zip_xy_scaler 11 10` is a 1.1× multiplier, approximating the fork's `move-factor-* = 110`. `zip_scroll_scaler 1 3` divides by 3, approximating `scroll-divisor-* = 3`. Both are starting points for tuning, not faithful reproductions — the fork's inertia and acceleration are deliberately not ported.
 
-- [ ] **Step 5: Turn USB logging back off**
+- [ ] **Step 5: Add snippet support to the build script, for diagnostics**
 
-In `config/corne_right.conf`, re-comment the line added in Task 3:
+Task 3 left USB logging off because `CONFIG_ZMK_USB_LOGGING=y` alone aborts the build — the `cdc-acm-uart` node lives in the `zmk-usb-logging` west snippet. But this task's driver reports I²C failures through `LOG_ERR("Failed to read PIM447 registers: %d", ret)`, which is unobservable without serial. If the trackball turns out dead at Step 8, that log line is the difference between "wrong pins" and "wrong driver logic", so the diagnostic path must exist.
+
+Add snippet support to `scripts/zmk-build.sh`, mirroring how CI passes `-S`:
+
+- Read an optional `SNIPPET` environment variable next to the existing `BOARD`.
+- Pass it through to the container alongside `BOARD` and `SHIELD`.
+- Inside, when non-empty, add `-S "${SNIPPET}"` to the `west build` invocation **before** the `--` separator (it is a west argument, not a CMake one).
+
+Keep it consistent with the existing empty-safe array pattern used for `SHIELD`. Do not change any other behaviour of the script.
+
+Then a logging build is available when needed:
+
+```bash
+SNIPPET=zmk-usb-logging ./scripts/zmk-build.sh "corne_right nice_view_adapter nice_view"
+```
+
+Leave `# CONFIG_ZMK_USB_LOGGING=y` commented in `config/corne_right.conf` — the snippet supplies it (`ZMK_USB_LOGGING` does `select LOG`, so the snippet restores logging wholesale; plain `CONFIG_LOG` is off in normal builds). Normal builds stay logging-free.
+
+- [ ] **Step 5b: Silence the vendor-prefix warning and ignore .DS_Store**
+
+Task 3's review found a DTC warning that names our own node:
 
 ```
-# CONFIG_ZMK_USB_LOGGING=y
+node '/soc/i2c@40004000/trackball@a' compatible 'pimoroni,pim447' has unknown vendor prefix 'pimoroni'
 ```
+
+It is non-fatal, but a warning naming our node is exactly the kind of noise that hides a real one later. `zephyr/module.yml` already sets `dts_root: .`, and ZMK has in-tree precedent at `app/dts/bindings/vendor-prefixes.txt`. Create `dts/bindings/vendor-prefixes.txt` containing a single **tab-separated** line:
+
+```
+pimoroni	Pimoroni Ltd.
+```
+
+Also append `.DS_Store` to `.gitignore` — macOS keeps creating it in the working tree. Append; do not overwrite (the file holds `.superpowers/` and `build-out/`).
+
+Verify after the Step 6 build:
+
+```bash
+grep -c "unknown vendor prefix" build-out/corne_right-nice_view_adapter-nice_view/build.log
+```
+
+Expected: `0`.
 
 - [ ] **Step 6: Build and verify the listener node resolved**
 
@@ -898,6 +928,15 @@ Flash the right half. Confirm, in order:
 5. Typing on both halves still works.
 
 If an axis is inverted, add `<&zip_xy_transform>` with the appropriate flags to `input-processors` rather than negating values in the driver. If the pointer is too slow or too fast, adjust the `zip_xy_scaler` ratio. Both are overlay-only changes; rebuild and reflash.
+
+**If the ball does nothing at all**, this is the first moment the P1.04/P1.06 wiring assumption is actually tested — nothing before this point transacts with the device. Build the diagnostic firmware from Step 5 and read the serial output:
+
+```bash
+SNIPPET=zmk-usb-logging ./scripts/zmk-build.sh "corne_right nice_view_adapter nice_view"
+```
+
+- Repeated `Failed to read PIM447 registers: -5` (`-EIO`) means nothing ACKed at address `0x0a` — the pins, the address, or the wiring are wrong. Confirm which pro-micro pads the trackball's SDA/SCL actually reach and correct the `NRF_PSEL` values.
+- No error lines but no movement means the bus works and the fault is in the reporting path — check the listener node resolved (Step 6) and that `CONFIG_ZMK_POINTING=y` is set.
 
 ---
 
