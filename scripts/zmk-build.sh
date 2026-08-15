@@ -21,6 +21,7 @@ VOLUME="zmk-corne-west"
 
 BOARD="${BOARD:-nice_nano_v2}"
 SHIELD="${1:-}"
+SNIPPET="${SNIPPET:-}"
 SLUG="$(echo "${SHIELD:-$BOARD}" | tr ' ' '-')"
 OUT="${REPO_ROOT}/build-out/${SLUG}"
 
@@ -36,6 +37,7 @@ docker run --rm \
   -v "${OUT}:/out" \
   -e BOARD="$BOARD" \
   -e SHIELD="$SHIELD" \
+  -e SNIPPET="$SNIPPET" \
   "$IMAGE" \
   bash -euo pipefail -c '
     rm -rf /ws/config
@@ -51,7 +53,10 @@ docker run --rm \
     EXTRA=()
     if [ -n "${SHIELD}" ]; then EXTRA+=(-DSHIELD="${SHIELD}"); fi
 
-    west build -s zmk/app -d /ws/build -b "${BOARD}" -- \
+    SNIPPET_ARGS=()
+    if [ -n "${SNIPPET}" ]; then SNIPPET_ARGS+=(-S "${SNIPPET}"); fi
+
+    west build -s zmk/app -d /ws/build -b "${BOARD}" ${SNIPPET_ARGS[@]+"${SNIPPET_ARGS[@]}"} -- \
       -DZMK_CONFIG=/ws/config \
       -DZMK_EXTRA_MODULES=/repo \
       ${EXTRA[@]+"${EXTRA[@]}"}

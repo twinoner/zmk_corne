@@ -4,6 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 
+#include "layers.h"
+#include <input/processors.dtsi>
+
 &pinctrl {
 	i2c1_default: i2c1_default {
 		group1 {
@@ -31,5 +34,18 @@
 		compatible = "pimoroni,pim447";
 		reg = <0xa>;
 		poll-interval = <20>;
+	};
+};
+
+/ {
+	trackball_listener {
+		compatible = "zmk,input-listener";
+		device = <&trackball>;
+		input-processors = <&zip_xy_scaler 11 10>;
+
+		scroll {
+			layers = <SCROLL>;
+			input-processors = <&zip_xy_to_scroll_mapper>, <&zip_scroll_scaler 1 3>;
+		};
 	};
 };
