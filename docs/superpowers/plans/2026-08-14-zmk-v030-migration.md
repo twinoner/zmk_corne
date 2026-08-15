@@ -820,13 +820,17 @@ In `pim447_init`, replace the `LOG_INF(...); return 0;` tail with:
 
 - [ ] **Step 4: Add the input listener to the overlay**
 
-In `config/corne_right.overlay`, add the layer header include directly below the file's comment block, above `&pinctrl`:
+In `config/corne_right.overlay`, add two includes directly below the file's comment block, above `&pinctrl`:
 
 ```c
+#include <input/processors.dtsi>
 #include "layers.h"
 ```
 
-The quoted form is required — the config directory is not on the DTS preprocessor's include path, so resolution relies on `layers.h` sitting beside this file.
+Both are required, and the bracket styles differ for a reason:
+
+- `"layers.h"` must be **quoted** — the config directory is not on the DTS preprocessor's include path, so resolution relies on `layers.h` sitting beside this file.
+- `<input/processors.dtsi>` uses **angle brackets** because ZMK's `app/dts` *is* on that path. Without it the build fails with `devicetree error: undefined node label 'zip_xy_scaler'`: the `zip_xy_scaler` / `zip_xy_to_scroll_mapper` / `zip_scroll_scaler` labels are declared `/omit-if-no-ref/` in `app/dts/input/processors.dtsi`, and **nothing in the ZMK tree includes that file by default** — `behaviors.dtsi` does not pull it in. A config using input processors must include it explicitly.
 
 Then append to the same file:
 
