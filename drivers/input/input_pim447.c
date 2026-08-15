@@ -14,18 +14,29 @@
 
 LOG_MODULE_REGISTER(pim447, CONFIG_INPUT_LOG_LEVEL);
 
-/* Register map. Delta counters are cleared by the device on read. */
-#define PIM447_REG_LEFT   0x04
-#define PIM447_REG_RIGHT  0x05
-#define PIM447_REG_UP     0x06
-#define PIM447_REG_DOWN   0x07
-#define PIM447_REG_SWITCH 0x08
+/* Register map, following Pimoroni's PIM447 firmware register layout.
+ * Delta counters are cleared by the device on read. */
+#define PIM447_REG_LEFT 0x04
 
-#define PIM447_REG_COUNT (PIM447_REG_SWITCH - PIM447_REG_LEFT + 1)
+/* Buffer indices for the burst read starting at PIM447_REG_LEFT. LEFT,
+ * RIGHT, UP, DOWN and SWITCH are consecutive registers, so the index into
+ * the read buffer doubles as the offset from PIM447_REG_LEFT. */
+enum {
+    PIM447_IDX_LEFT = 0,
+    PIM447_IDX_RIGHT,
+    PIM447_IDX_UP,
+    PIM447_IDX_DOWN,
+    PIM447_IDX_SWITCH,
+    PIM447_IDX_COUNT,
+};
 
 /* Bit 7 of the switch register is the current button state; the low bits
  * are a press counter we do not use. */
 #define PIM447_SWITCH_PRESSED BIT(7)
+
+/* Consecutive read failures before the poll backs off from 50 Hz to
+ * roughly 1 Hz. Kept low so a merely flaky bus still feels responsive. */
+#define PIM447_ERR_BACKOFF_THRESHOLD 5
 
 struct pim447_config {
     struct i2c_dt_spec i2c;
@@ -36,6 +47,7 @@ struct pim447_data {
     const struct device *dev;
     struct k_work_delayable work;
     bool btn_pressed;
+    uint8_t err_count;
 };
 
 static void pim447_poll(struct k_work *work) {
@@ -43,17 +55,36 @@ static void pim447_poll(struct k_work *work) {
     struct pim447_data *data = CONTAINER_OF(dwork, struct pim447_data, work);
     const struct device *dev = data->dev;
     const struct pim447_config *cfg = dev->config;
-    uint8_t buf[PIM447_REG_COUNT];
+    uint8_t buf[PIM447_IDX_COUNT];
 
     int ret = i2c_burst_read_dt(&cfg->i2c, PIM447_REG_LEFT, buf, sizeof(buf));
     if (ret < 0) {
-        LOG_ERR("Failed to read PIM447 registers: %d", ret);
+        /* Cap err_count at the backoff threshold + 1 instead of letting it
+         * free-run: a permanently dead trackball would otherwise wrap the
+         * uint8_t back through zero and bounce out of backoff. */
+        if (data->err_count <= PIM447_ERR_BACKOFF_THRESHOLD) {
+            data->err_count++;
+        }
+
+        if (data->err_count == 1) {
+            LOG_ERR("Failed to read PIM447 registers: %d", ret);
+
+            /* Don't leave the host holding a phantom click if the bus
+             * dies mid-press; nothing else on this path can release it. */
+            if (data->btn_pressed) {
+                input_report_key(dev, INPUT_BTN_0, false, true, K_NO_WAIT);
+                data->btn_pressed = false;
+            }
+        }
+
         goto reschedule;
     }
 
-    int16_t dx = (int16_t)buf[1] - (int16_t)buf[0]; /* RIGHT - LEFT */
-    int16_t dy = (int16_t)buf[3] - (int16_t)buf[2]; /* DOWN  - UP   */
-    bool pressed = (buf[4] & PIM447_SWITCH_PRESSED) != 0;
+    data->err_count = 0;
+
+    int16_t dx = (int16_t)buf[PIM447_IDX_RIGHT] - (int16_t)buf[PIM447_IDX_LEFT];
+    int16_t dy = (int16_t)buf[PIM447_IDX_DOWN] - (int16_t)buf[PIM447_IDX_UP];
+    bool pressed = (buf[PIM447_IDX_SWITCH] & PIM447_SWITCH_PRESSED) != 0;
     bool btn_changed = pressed != data->btn_pressed;
 
     /* Stay silent when nothing happened so the listener is not woken on
@@ -68,7 +99,11 @@ static void pim447_poll(struct k_work *work) {
     }
 
 reschedule:
-    k_work_schedule(&data->work, K_MSEC(cfg->poll_interval_ms));
+    if (data->err_count > PIM447_ERR_BACKOFF_THRESHOLD) {
+        k_work_schedule(&data->work, K_MSEC(cfg->poll_interval_ms * 50));
+    } else {
+        k_work_schedule(&data->work, K_MSEC(cfg->poll_interval_ms));
+    }
 }
 
 static int pim447_init(const struct device *dev) {

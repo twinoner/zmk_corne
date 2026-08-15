@@ -5,6 +5,7 @@
  */
 
 #include "layers.h"
+/* zip_* processor labels are /omit-if-no-ref/; nothing in ZMK includes this for us. */
 #include <input/processors.dtsi>
 
 &pinctrl {
