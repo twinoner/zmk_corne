@@ -63,9 +63,8 @@ static void pim447_poll(struct k_work *work) {
         input_report_rel(dev, INPUT_REL_Y, dy, !btn_changed, K_NO_WAIT);
     }
 
-    if (btn_changed) {
+    if (btn_changed && input_report_key(dev, INPUT_BTN_0, pressed, true, K_NO_WAIT) == 0) {
         data->btn_pressed = pressed;
-        input_report_key(dev, INPUT_BTN_0, pressed, true, K_NO_WAIT);
     }
 
 reschedule:

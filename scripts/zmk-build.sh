@@ -22,7 +22,7 @@ VOLUME="zmk-corne-west"
 BOARD="${BOARD:-nice_nano_v2}"
 SHIELD="${1:-}"
 SNIPPET="${SNIPPET:-}"
-SLUG="$(echo "${SHIELD:-$BOARD}" | tr ' ' '-')"
+SLUG="$(echo "${SHIELD:-$BOARD}${SNIPPET:+-$SNIPPET}" | tr ' ' '-')"
 OUT="${REPO_ROOT}/build-out/${SLUG}"
 
 rm -rf "$OUT"
