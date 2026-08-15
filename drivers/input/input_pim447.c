@@ -68,13 +68,16 @@ static void pim447_poll(struct k_work *work) {
 
         if (data->err_count == 1) {
             LOG_ERR("Failed to read PIM447 registers: %d", ret);
+        }
 
-            /* Don't leave the host holding a phantom click if the bus
-             * dies mid-press; nothing else on this path can release it. */
-            if (data->btn_pressed) {
-                input_report_key(dev, INPUT_BTN_0, false, true, K_NO_WAIT);
-                data->btn_pressed = false;
-            }
+        /* Don't leave the host holding a phantom click if the bus dies
+         * mid-press; nothing else on this path can release it. Retried on
+         * every failed poll rather than only the first, because a full input
+         * queue drops the report silently under K_NO_WAIT — clearing the flag
+         * regardless would strand the host holding the button. */
+        if (data->btn_pressed &&
+            input_report_key(dev, INPUT_BTN_0, false, true, K_NO_WAIT) == 0) {
+            data->btn_pressed = false;
         }
 
         goto reschedule;
