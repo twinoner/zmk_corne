@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: MIT
+
+if INPUT
+
+config INPUT_PIM447
+    bool "Pimoroni PIM447 trackball"
+    default y
+    depends on I2C
+    depends on DT_HAS_PIMORONI_PIM447_ENABLED
+    help
+      I2C-polled input driver for the Pimoroni PIM447 trackball.
+      Reports INPUT_REL_X / INPUT_REL_Y and INPUT_BTN_0.
+
+endif # INPUT

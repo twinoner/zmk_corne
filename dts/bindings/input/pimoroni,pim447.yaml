@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: MIT
+
+description: Pimoroni PIM447 trackball
+
+compatible: "pimoroni,pim447"
+
+include: [i2c-device.yaml]
+
+properties:
+  poll-interval:
+    type: int
+    default: 50
+    description: |
+      Interval in milliseconds at which the trackball registers are polled.
