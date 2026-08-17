@@ -13,3 +13,12 @@
 		y-code = <INPUT_REL_Y>;
 	};
 };
+
+&zip_accel {
+	max-accel-x = <150>;    /* % scaling of the gain curve, default 100 */
+	max-accel-y = <150>;
+	move-inertia-x = <60>;  /* EMA history weight 0-99, default 78 */
+	move-inertia-y = <60>;
+	exactness-x = <2>;      /* |value| <= this skips the curve, default 0 */
+	exactness-y = <2>;
+};
