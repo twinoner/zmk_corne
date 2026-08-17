@@ -15,10 +15,10 @@
 };
 
 &zip_accel {
-	max-accel-x = <120>;    /* % scaling of the gain curve, default 100 */
-	max-accel-y = <120>;
-	move-inertia-x = <80>;  /* EMA history weight 0-99, default 78 */
-	move-inertia-y = <80>;
+	max-accel-x = <90>;    /* % scaling of the gain curve, default 100 */
+	max-accel-y = <90>;
+	move-inertia-x = <70>;  /* EMA history weight 0-99, default 78 */
+	move-inertia-y = <70>;
 	exactness-x = <2>;      /* |value| <= this skips the curve, default 0 */
 	exactness-y = <2>;
 };
