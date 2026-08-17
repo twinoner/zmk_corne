@@ -1,0 +1,74 @@
+# SPDX-License-Identifier: MIT
+
+description: |
+  Velocity-dependent acceleration for relative pointing devices.
+
+  All tuning is per axis. Every default reproduces the ds87 fork's feel
+  exactly, so overriding nothing is the known-good baseline.
+
+  Smoothing state is kept per node, not per listener: referencing one instance
+  from two input listeners makes them share state.
+
+compatible: "zmk,input-processor-accel"
+
+include: ip_zero_param.yaml
+
+properties:
+  type:
+    type: int
+    required: true
+    description: Event type to process, e.g. INPUT_EV_REL.
+
+  x-code:
+    type: int
+    required: true
+    description: Event code treated as the X axis, e.g. INPUT_REL_X.
+
+  y-code:
+    type: int
+    required: true
+    description: Event code treated as the Y axis, e.g. INPUT_REL_Y.
+
+  max-accel-x:
+    type: int
+    default: 100
+    description: |
+      Percentage scaling of the gain curve on X. 100 leaves the curve as-is.
+      Capped at 2255 by a BUILD_ASSERT, above which the curve saturates the
+      int16 event value.
+
+  max-accel-y:
+    type: int
+    default: 100
+    description: Percentage scaling of the gain curve on Y. See max-accel-x.
+
+  move-inertia-x:
+    type: int
+    default: 78
+    description: |
+      Weight given to history by the exponential moving average on X, 0-99.
+      0 disables smoothing. 78 matches the 8-sample boxcar the fork used.
+
+  move-inertia-y:
+    type: int
+    default: 78
+    description: EMA weight given to history on Y, 0-99. See move-inertia-x.
+
+  exactness-x:
+    type: int
+    default: 0
+    description: |
+      Absolute X values at or below this bypass acceleration entirely, buying
+      back fine control that the curve's 3x floor otherwise denies.
+
+  exactness-y:
+    type: int
+    default: 0
+    description: Absolute Y values at or below this bypass acceleration.
+
+  accel-curve:
+    type: array
+    description: |
+      Optional gain curve override, shared by both axes and indexed by the
+      absolute event value. Must have exactly 30 entries and index 0 must be
+      0; both are enforced by BUILD_ASSERT. Omit to use the built-in table.

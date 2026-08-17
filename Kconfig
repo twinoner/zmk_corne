@@ -1,3 +1,4 @@
 # SPDX-License-Identifier: MIT
 
 rsource "drivers/Kconfig"
+rsource "src/pointing/Kconfig"

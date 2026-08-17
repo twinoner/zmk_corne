@@ -7,6 +7,8 @@
 #include "layers.h"
 /* zip_* processor labels are /omit-if-no-ref/; nothing in ZMK includes this for us. */
 #include <input/processors.dtsi>
+/* Our own processor, resolved via this module's dts_root. */
+#include <input/processors/accel.dtsi>
 
 &pinctrl {
 	i2c1_default: i2c1_default {
@@ -47,7 +49,7 @@
 	trackball_listener {
 		compatible = "zmk,input-listener";
 		device = <&trackball>;
-		input-processors = <&zip_xy_scaler 11 10>;
+		input-processors = <&zip_x_scaler 11 10>, <&zip_y_scaler 11 10>, <&zip_accel>;
 
 		scroll {
 			layers = <SCROLL>;

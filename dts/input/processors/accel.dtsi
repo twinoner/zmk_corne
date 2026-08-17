@@ -1,0 +1,15 @@
+/*
+ * SPDX-License-Identifier: MIT
+ */
+
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+
+/ {
+	/omit-if-no-ref/ zip_accel: zip_accel {
+		compatible = "zmk,input-processor-accel";
+		#input-processor-cells = <0>;
+		type = <INPUT_EV_REL>;
+		x-code = <INPUT_REL_X>;
+		y-code = <INPUT_REL_Y>;
+	};
+};

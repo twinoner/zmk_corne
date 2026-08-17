@@ -1,0 +1,22 @@
+# SPDX-License-Identifier: MIT
+
+if ZMK_POINTING
+
+config ZMK_INPUT_PROCESSOR_ACCEL
+    bool "Trackball acceleration input processor"
+    default y
+    depends on DT_HAS_ZMK_INPUT_PROCESSOR_ACCEL_ENABLED
+    help
+      Velocity-dependent acceleration with per-axis smoothing for relative
+      pointing devices. Restores the gain curve and averaging the ds87 fork
+      applied before the ZMK v0.3.0 migration.
+
+config ZMK_INPUT_PROCESSOR_ACCEL_MAX_DEVICES
+    int "Input devices tracked per accel processor instance"
+    default 4
+    depends on ZMK_INPUT_PROCESSOR_ACCEL
+    help
+      Smoothing state is kept per input device index. Events from a device at
+      or above this index pass through unaccelerated.
+
+endif # ZMK_POINTING
