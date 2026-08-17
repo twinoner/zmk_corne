@@ -58,13 +58,18 @@ properties:
     type: int
     default: 0
     description: |
-      Absolute X values at or below this bypass acceleration entirely, buying
-      back fine control that the curve's 3x floor otherwise denies.
+      Absolute X values at or below this bypass the acceleration curve and
+      pass through unscaled, buying back fine control that the curve's 3x
+      floor otherwise denies. They are still smoothed by move-inertia-x and
+      subject to fraction carry, so they are not exempt from the pipeline.
 
   exactness-y:
     type: int
     default: 0
-    description: Absolute Y values at or below this bypass acceleration.
+    description: |
+      Absolute Y values at or below this bypass the acceleration curve and
+      pass through unscaled. See exactness-x; still smoothed by
+      move-inertia-y.
 
   accel-curve:
     type: array

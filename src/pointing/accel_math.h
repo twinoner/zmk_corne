@@ -39,7 +39,9 @@ static inline int32_t zmk_accel_curve_lookup(const uint16_t *curve,
     }
 
     int32_t sign = value < 0 ? -1 : 1;
-    int32_t mag = value < 0 ? -value : value;
+    /* Negate through unsigned to avoid signed-overflow UB when value ==
+     * INT32_MIN, whose magnitude does not fit in int32_t. */
+    int32_t mag = value < 0 ? (int32_t)(-(uint32_t)value) : value;
 
     if (mag <= (int32_t)cfg->exactness) {
         return value;
@@ -83,7 +85,7 @@ static inline int16_t zmk_accel_apply(const uint16_t *curve,
     int32_t accel = zmk_accel_curve_lookup(curve, cfg, value);
 
     int32_t inertia = cfg->inertia > 99 ? 99 : (int32_t)cfg->inertia;
-    state->ema_q8 = (state->ema_q8 * inertia + (accel << 8) * (100 - inertia)) / 100;
+    state->ema_q8 = (state->ema_q8 * inertia + (accel * 256) * (100 - inertia)) / 100;
 
     /* Emit the integer part and keep the fraction, so slow movement
      * accumulates into real counts instead of truncating to nothing.
@@ -91,7 +93,7 @@ static inline int16_t zmk_accel_apply(const uint16_t *curve,
      * signs and keeps the diffusion consistent. */
     state->frac_q8 += state->ema_q8;
     int32_t out = state->frac_q8 >> 8;
-    state->frac_q8 -= out << 8;
+    state->frac_q8 -= out * 256;
 
     if (out > INT16_MAX) {
         return INT16_MAX;

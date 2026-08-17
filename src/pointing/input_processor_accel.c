@@ -88,10 +88,14 @@ static struct zmk_input_processor_driver_api accel_driver_api = {
 
 #define ACCEL_INST(n)                                                                              \
     ACCEL_CURVE_DEF(n)                                                                             \
-    BUILD_ASSERT(DT_INST_PROP(n, move_inertia_x) < 100, "move-inertia-x must be 0-99");            \
-    BUILD_ASSERT(DT_INST_PROP(n, move_inertia_y) < 100, "move-inertia-y must be 0-99");            \
-    BUILD_ASSERT(DT_INST_PROP(n, max_accel_x) <= 2255, "max-accel-x saturates int16 above 2255");  \
-    BUILD_ASSERT(DT_INST_PROP(n, max_accel_y) <= 2255, "max-accel-y saturates int16 above 2255");  \
+    BUILD_ASSERT(DT_INST_PROP(n, move_inertia_x) >= 0 && DT_INST_PROP(n, move_inertia_x) < 100,    \
+                 "move-inertia-x must be 0-99");                                                    \
+    BUILD_ASSERT(DT_INST_PROP(n, move_inertia_y) >= 0 && DT_INST_PROP(n, move_inertia_y) < 100,    \
+                 "move-inertia-y must be 0-99");                                                    \
+    BUILD_ASSERT(DT_INST_PROP(n, max_accel_x) >= 0 && DT_INST_PROP(n, max_accel_x) <= 2255,        \
+                 "max-accel-x must be 0-2255; it saturates int16 above 2255");                     \
+    BUILD_ASSERT(DT_INST_PROP(n, max_accel_y) >= 0 && DT_INST_PROP(n, max_accel_y) <= 2255,        \
+                 "max-accel-y must be 0-2255; it saturates int16 above 2255");                     \
     static struct accel_data accel_data_##n = {};                                                  \
     static const struct accel_config accel_config_##n = {                                          \
         .type = DT_INST_PROP(n, type),                                                             \
