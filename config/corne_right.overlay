@@ -34,25 +34,12 @@
 	trackball: trackball@a {
 		compatible = "pimoroni,pim447";
 		reg = <0xa>;
+		/*
+		 * poll-interval is the only property this driver reads. The ds87
+		 * fork's tuning properties are not declared by our binding and were
+		 * dead in the fork itself; feel lives in the input processors below.
+		 */
 		poll-interval = <20>;
-
-		power-layer = <0>; /* MOUSE layer */
-		// idle-timeout = <10>; /* in seconds */
-		// invert-move-x;               // Invert mouse X axis (left is right, and vice versa)
-		// invert-move-y;               // Invert mouse Y axis (up is down, and vice versa)
-		// swap-axes;                   // Swap X and Y axes (horizontal is vertical, and vice versa)
-		// invert-scroll-x;             // Invert wheel X axis (left is right, and vice versa)
-
-		move-factor-x = <110>;       // Sensitivity X; default: 100
-		move-factor-y = <110>;       // Sensitivity Y; default: 100
-		move-inertia-x = <70>;       // Inertia X, between 0 (no inertia) and 99 (huge inertia); default: 0; note that some inertia is needed for acceleration
-		move-inertia-y = <70>;       // Inertia Y, between 0 (no inertia) and 99 (huge inertia); default: 0; note that some inertia is needed for acceleration
-		norm = <PIM447_NORM_MAX>; // Metric for 2d distance measurement; default: PIM447_NORM_EUCLID; alternative: PIM447_NORM_MAX in order to enhance diagonal movement
-		exactness = <5>;             // Range of small velocities that are not accelerated
-		max-accel = <130>;           // Maximum acceleration; default: 100
-		scroll-divisor-x = <3>;      // Increase wheel velocity (default: 2)
-		scroll-divisor-y = <3>;      // Increase wheel velocity (default: 2)
-		button = <0>;                // Send mouse button 4 when pressing the ball which is usually ignored by the operating system (default: 0, ie. left-click)
 	};
 };
 
