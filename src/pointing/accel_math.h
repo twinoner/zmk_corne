@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <limits.h>
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -52,4 +53,53 @@ static inline int32_t zmk_accel_curve_lookup(const uint16_t *curve,
     }
 
     return sign * (((int32_t)curve[mag] * (int32_t)cfg->max_accel) / 100);
+}
+
+/*
+ * Movement gaps longer than this zero the smoothing state. Events only fire on
+ * non-zero movement, so without it a pause would leave a stale velocity for the
+ * next flick to jump from. Five times the 20 ms poll interval.
+ */
+#define ZMK_ACCEL_IDLE_RESET_MS 100
+
+struct zmk_accel_axis_state {
+    int32_t ema_q8;  /* smoothed output, Q8 fixed point */
+    int32_t frac_q8; /* error-diffusion accumulator, Q8 */
+    uint32_t last_ms;
+    bool seen; /* distinguishes "never used" from "last used at t=0" */
+};
+
+static inline int16_t zmk_accel_apply(const uint16_t *curve,
+                                      const struct zmk_accel_axis_config *cfg,
+                                      struct zmk_accel_axis_state *state, int32_t value,
+                                      uint32_t now_ms) {
+    if (!state->seen || (now_ms - state->last_ms) > ZMK_ACCEL_IDLE_RESET_MS) {
+        state->ema_q8 = 0;
+        state->frac_q8 = 0;
+    }
+
+    state->last_ms = now_ms;
+    state->seen = true;
+
+    int32_t accel = zmk_accel_curve_lookup(curve, cfg, value);
+
+    int32_t inertia = cfg->inertia > 99 ? 99 : (int32_t)cfg->inertia;
+    state->ema_q8 = (state->ema_q8 * inertia + (accel << 8) * (100 - inertia)) / 100;
+
+    /* Emit the integer part and keep the fraction, so slow movement
+     * accumulates into real counts instead of truncating to nothing.
+     * Arithmetic shift floors, which leaves frac_q8 in [0, 255] for both
+     * signs and keeps the diffusion consistent. */
+    state->frac_q8 += state->ema_q8;
+    int32_t out = state->frac_q8 >> 8;
+    state->frac_q8 -= out << 8;
+
+    if (out > INT16_MAX) {
+        return INT16_MAX;
+    }
+    if (out < INT16_MIN) {
+        return INT16_MIN;
+    }
+
+    return (int16_t)out;
 }
