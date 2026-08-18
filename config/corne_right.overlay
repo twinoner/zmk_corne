@@ -7,6 +7,8 @@
 #include "layers.h"
 /* zip_* processor labels are /omit-if-no-ref/; nothing in ZMK includes this for us. */
 #include <input/processors.dtsi>
+/* INPUT_TRANSFORM_* flags for zip_xy_transform / zip_scroll_transform. */
+#include <dt-bindings/zmk/input_transform.h>
 /* Our own processor, resolved via this module's dts_root. */
 #include <input/processors/accel.dtsi>
 
@@ -49,11 +51,25 @@
 	trackball_listener {
 		compatible = "zmk,input-listener";
 		device = <&trackball>;
-		input-processors = <&zip_x_scaler 11 10>, <&zip_y_scaler 11 10>, <&zip_accel>;
+		/*
+		 * Invert first, so the scalers and accel downstream only ever see
+		 * the already-corrected sign. To also invert X, OR the flags:
+		 *   <&zip_xy_transform (INPUT_TRANSFORM_Y_INVERT | INPUT_TRANSFORM_X_INVERT)>
+		 */
+		input-processors = <&zip_xy_transform INPUT_TRANSFORM_Y_INVERT>,
+			<&zip_x_scaler 11 10>, <&zip_y_scaler 11 10>, <&zip_accel>;
 
 		scroll {
 			layers = <SCROLL>;
-			input-processors = <&zip_xy_to_scroll_mapper>, <&zip_scroll_scaler 1 3>;
+			/*
+			 * A layer override replaces the base chain rather than adding to
+			 * it, so this needs its own invert. It goes after the mapper
+			 * because zip_scroll_transform only matches WHEEL/HWHEEL, and the
+			 * mapper is a pure code remap that leaves the sign alone.
+			 */
+			input-processors = <&zip_xy_to_scroll_mapper>,
+				<&zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>,
+				<&zip_scroll_scaler 1 3>;
 		};
 	};
 };
