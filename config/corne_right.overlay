@@ -52,7 +52,18 @@
 	trackball_listener {
 		compatible = "zmk,input-listener";
 		device = <&trackball>;
-		input-processors = <&zip_click_lock>;
+		/*
+		 * No zip_xy_transform here on purpose: pointer movement is not
+		 * inverted, only scroll is, and that inversion lives in the scroll
+		 * child below. To invert pointer movement again, prepend
+		 *   <&zip_xy_transform INPUT_TRANSFORM_Y_INVERT>
+		 * so the scalers and accel downstream see the corrected sign.
+		 *
+		 * zip_click_lock goes first because it only ever touches BTN_0 and
+		 * stops the chain when it swallows an edge.
+		 */
+		input-processors = <&zip_click_lock>,
+			<&zip_x_scaler 11 10>, <&zip_y_scaler 11 10>, <&zip_accel>;
 
 		scroll {
 			layers = <SCROLL>;
