@@ -1,0 +1,14 @@
+/*
+ * SPDX-License-Identifier: MIT
+ */
+
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+
+/ {
+	/omit-if-no-ref/ zip_click_lock: zip_click_lock {
+		compatible = "zmk,input-processor-click-lock";
+		#input-processor-cells = <0>;
+		type = <INPUT_EV_KEY>;
+		code = <INPUT_BTN_0>;
+	};
+};

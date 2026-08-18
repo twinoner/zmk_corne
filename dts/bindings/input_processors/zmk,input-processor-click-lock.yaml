@@ -1,0 +1,27 @@
+# SPDX-License-Identifier: MIT
+
+description: |
+  Turns a pointing device button into a lock: the first click latches it down
+  and the second releases it. Off at boot; the &click_lock behavior turns it on
+  and off from the keymap.
+
+  Lock state is global, not per node, so referencing one instance from several
+  listener chains is the supported way to keep the lock working across layer
+  overrides — a layer override replaces the base chain rather than extending
+  it, and a click made on a layer whose chain omits this processor would
+  otherwise bypass the lock.
+
+compatible: "zmk,input-processor-click-lock"
+
+include: ip_zero_param.yaml
+
+properties:
+  type:
+    type: int
+    required: true
+    description: Event type to process, e.g. INPUT_EV_KEY.
+
+  code:
+    type: int
+    required: true
+    description: Event code of the button to lock, e.g. INPUT_BTN_0.

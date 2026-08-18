@@ -9,8 +9,9 @@
 #include <input/processors.dtsi>
 /* INPUT_TRANSFORM_* flags for zip_xy_transform / zip_scroll_transform. */
 #include <dt-bindings/zmk/input_transform.h>
-/* Our own processor, resolved via this module's dts_root. */
+/* Our own processors, resolved via this module's dts_root. */
 #include <input/processors/accel.dtsi>
+#include <input/processors/click_lock.dtsi>
 
 &pinctrl {
 	i2c1_default: i2c1_default {
@@ -51,6 +52,7 @@
 	trackball_listener {
 		compatible = "zmk,input-listener";
 		device = <&trackball>;
+		input-processors = <&zip_click_lock>;
 
 		scroll {
 			layers = <SCROLL>;
@@ -59,10 +61,15 @@
 			 * it, so this needs its own invert. It goes after the mapper
 			 * because zip_scroll_transform only matches WHEEL/HWHEEL, and the
 			 * mapper is a pure code remap that leaves the sign alone.
+			 *
+			 * zip_click_lock is repeated for the same reason: its state is
+			 * global, so listing it here keeps clicks made on this layer going
+			 * through the same lock instead of bypassing it.
 			 */
 			input-processors = <&zip_xy_to_scroll_mapper>,
 				<&zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>,
-				<&zip_scroll_scaler 1 3>;
+				<&zip_scroll_scaler 1 3>,
+				<&zip_click_lock>;
 		};
 	};
 };

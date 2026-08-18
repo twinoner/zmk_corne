@@ -19,4 +19,14 @@ config ZMK_INPUT_PROCESSOR_ACCEL_MAX_DEVICES
       Smoothing state is kept per input device index. Events from a device at
       or above this index pass through unaccelerated.
 
+config ZMK_CLICK_LOCK
+    bool "Trackball click lock"
+    default y
+    depends on DT_HAS_ZMK_INPUT_PROCESSOR_CLICK_LOCK_ENABLED || DT_HAS_ZMK_BEHAVIOR_CLICK_LOCK_ENABLED
+    help
+      Lets the trackball button latch: first click locks it down, second click
+      releases it. Covers both the zip_click_lock input processor and the
+      &click_lock behavior that toggles the mode, because the two share one
+      mode flag and compiling only one of them would not link.
+
 endif # ZMK_POINTING

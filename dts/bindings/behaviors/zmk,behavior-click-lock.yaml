@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: MIT
+
+description: |
+  Toggles click lock on the trackball button between momentary (the default)
+  and lock, where the first click latches the button down and the second
+  releases it.
+
+  Engaging a lock and then turning the mode off does not release the button
+  from here; the next trackball press does.
+
+compatible: "zmk,behavior-click-lock"
+
+include: zero_param.yaml

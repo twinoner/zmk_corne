@@ -14,6 +14,21 @@
 #include "layers.h"
 
 / {
+	behaviors {
+		/*
+		 * Toggles the trackball button between momentary and lock, where the
+		 * first click latches the button down and the second releases it. The
+		 * node lives here rather than in corne_right.overlay because this
+		 * keymap is compiled into both halves; the behavior runs on the
+		 * central (the right half) whichever side the key is on.
+		 */
+		click_lock: click_lock {
+			compatible = "zmk,behavior-click-lock";
+			#binding-cells = <0>;
+			display-name = "Click Lock";
+		};
+	};
+
 	conditional_layers {
         compatible = "zmk,conditional-layers";
         adjust_layer {
@@ -44,13 +59,15 @@
 // -----------------------------------------------------------------------------------------
 // |  ESC |  1  |  2  |  3  |  4  |  5  |       |  6  |  7  |  8  |  9  |  0  | BKSP |
 // |  F1  |  F2 |  F3 |  F4 |  F5 |  F6 |       |  F7 |  F8 |  F9 | F10 | F11 | F12  |
-// |      |     |     |     |     |     |       |     |     |     |     |     |  "|" |
+// |      |     |     | LOCK|SCRL |TGSCR|       | MB1 | MB3 | MB2 |     |     |  "|" |
 //                    | GUI |     | PG_UP |       | PG_UP |     | DEL |
+// LOCK toggles the trackball click between momentary and lock (click to hold,
+// click again to let go).
 			label = "Lower";
 			bindings = <
 &kp ESC &kp N1 &kp N2 &kp N3 &kp N4 &kp N5              &kp N6 &kp N7 &kp N8 &kp N9 &kp N0 &kp BSPC
 &kp F1 &kp F2 &kp F3 &kp F4 &kp F5 &kp F6               &kp F7 &kp F8 &kp F9 &kp F10 &kp F11 &kp F12
-&trans &trans &trans &trans &mo SCROLL &tog SCROLL      &mkp MB1 &mkp MB3 &mkp MB2 &trans &trans &kp PIPE
+&trans &trans &trans &click_lock &mo SCROLL &tog SCROLL      &mkp MB1 &mkp MB3 &mkp MB2 &trans &trans &kp PIPE
 					&kp LGUI &trans &kp PG_UP      &kp PG_UP &trans &kp DEL
 			>;
 		};
