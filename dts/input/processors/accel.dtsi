@@ -17,8 +17,31 @@
 &zip_accel {
 	max-accel-x = <90>;    /* % scaling of the gain curve, default 100 */
 	max-accel-y = <90>;
-	move-inertia-x = <70>;  /* EMA history weight 0-99, default 78 */
-	move-inertia-y = <70>;
+	move-inertia-x = <85>;  /* EMA history weight 0-99, default 78 */
+	move-inertia-y = <85>;
+	/*
+	 * Keep this at 2 or higher. The curve below starts near identity, and
+	 * max-accel's integer divide would floor index 1 (1 * 90 / 100) to 0,
+	 * killing the slowest crawl outright. Values 1 and 2 bypass that.
+	 */
 	exactness-x = <2>;      /* |value| <= this skips the curve, default 0 */
 	exactness-y = <2>;
+
+	/*
+	 * Replaces the ds87 table, which was flat at 3/7/10 for indices 1-3 and
+	 * then stepped straight to 48. With exactness at 2 that made the pointer
+	 * go 2 -> 9 -> 43 over three consecutive poll magnitudes, which is the
+	 * lurch this curve exists to remove.
+	 *
+	 * Indexed by the absolute event value *after* the 11/10 scalers in
+	 * corne_right.overlay, so a raw 4 lands on index 4. Deltas grow smoothly
+	 * from 1 and rejoin the old 1452 ceiling at the top, so flicks are as
+	 * fast as before while everything below index ~8 is far gentler.
+	 * Index 0 must stay 0 and the length must stay 30; both are BUILD_ASSERTs.
+	 */
+	accel-curve = <
+		   0,    1,    3,    6,   11,   18,   28,   42,   60,   83,
+		 111,  144,  182,  225,  273,  326,  384,  447,  515,  588,
+		 666,  750,  840,  936, 1038, 1146, 1248, 1350, 1452, 1452
+	>;
 };
