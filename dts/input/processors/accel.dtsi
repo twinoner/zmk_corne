@@ -39,9 +39,10 @@
 	 * fast as before while everything below index ~8 is far gentler.
 	 * Index 0 must stay 0 and the length must stay 30; both are BUILD_ASSERTs.
 	 */
+	/* Cells inside <> are whitespace-separated; commas are a parse error. */
 	accel-curve = <
-		   0,    1,    3,    6,   11,   18,   28,   42,   60,   83,
-		 111,  144,  182,  225,  273,  326,  384,  447,  515,  588,
-		 666,  750,  840,  936, 1038, 1146, 1248, 1350, 1452, 1452
+		   0    1    3    6   11   18   28   42   60   83
+		 111  144  182  225  273  326  384  447  515  588
+		 666  750  840  936 1038 1146 1248 1350 1452 1452
 	>;
 };
