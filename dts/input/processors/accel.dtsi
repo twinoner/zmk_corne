@@ -17,8 +17,8 @@
 &zip_accel {
 	max-accel-x = <90>;    /* % scaling of the gain curve, default 100 */
 	max-accel-y = <90>;
-	move-inertia-x = <78>;  /* EMA history weight 0-99, default 78 */
-	move-inertia-y = <78>;
+	move-inertia-x = <73>;  /* EMA history weight 0-99, default 78 */
+	move-inertia-y = <73>;
 	/*
 	 * Keep this at 2 or higher. The curve below starts near identity, and
 	 * max-accel's integer divide would floor index 1 (1 * 90 / 100) to 0,

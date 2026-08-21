@@ -68,7 +68,7 @@
 &kp ESC &kp N1 &kp N2 &kp N3 &kp N4 &kp N5              &kp N6 &kp N7 &kp N8 &kp N9 &kp N0 &kp BSPC
 &kp F1 &kp F2 &kp F3 &kp F4 &kp F5 &kp F6               &kp F7 &kp F8 &kp F9 &kp F10 &kp F11 &kp F12
 &trans &trans &trans &click_lock &mo SCROLL &tog SCROLL      &mkp MB1 &mkp MB3 &mkp MB2 &trans &trans &kp PIPE
-					&kp LGUI &trans &kp PG_UP      &kp PG_UP &trans &kp DEL
+					&kp LGUI &trans &trans      &trans &trans &kp DEL
 			>;
 		};
 
@@ -81,7 +81,7 @@
 			label = "Raise";
 			bindings = <
 &kp CAPS &trans &trans &trans &trans &trans				&trans &trans &trans &trans &trans &kp GRAVE
-&trans &trans &trans &trans &trans &trans			&trans &kp LEFT &kp DOWN &kp UP &kp RIGHT &kp RCTRL
+&trans &trans &trans &trans &trans &kp C_BRIGHTNESS_DEC			&kp C_BRIGHTNESS_INC &kp LEFT &kp DOWN &kp UP &kp RIGHT &kp RCTRL
 &trans &kp HOME &kp PG_UP &kp PG_DN &kp END &kp K_CMENU			&kp KP_PLUS &kp MINUS &kp EQUAL &kp KP_MULTIPLY &trans &kp BSLH
 					&kp LALT &trans &kp LBKT		&kp RBKT &trans &kp RALT
 			>;
